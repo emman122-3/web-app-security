@@ -1,0 +1,228 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Security Project</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header, footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+        nav ul {
+            list-style-type: none;
+            background: #555;
+            padding: 10px;
+            text-align: center;
+        }
+        nav ul li {
+            display: inline;
+            margin-right: 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+        main {
+            padding: 20px;
+        }
+        .section {
+            display: none;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .result {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        .reset-btn {
+            margin-top: 20px;
+            background-color: #f44336;
+        }
+        .reset-btn:hover {
+            background-color: #e53935;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Web Security Project</h1>
+        <p>Explore the importance of web application security.</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a onclick="showSection('home')">Home</a></li>
+            <li><a onclick="showSection('security')">Web Application Security</a></li>
+            <li><a onclick="showSection('quiz')">Quiz</a></li>
+            <li><a onclick="showSection('resources')">Resources</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div id="home" class="section">
+            <h2>Welcome to the Web Security Project</h2>
+            <p>This project provides insights into securing web applications.</p>
+        </div>
+
+        <div id="security" class="section">
+            <h2>Web Application Security</h2>
+            <p>Understanding the importance of securing web applications from cyber threats.</p>
+            <ul>
+                <li><strong>Threats and Vulnerabilities:</strong> Includes SQL injection, cross-site scripting (XSS), and DDoS attacks.</li>
+                <li><strong>Authentication and Authorization:</strong> Ensuring only authorized users access certain parts of the application.</li>
+                <li><strong>Data Encryption:</strong> Protecting sensitive data both in transit and at rest using TLS.</li>
+                <li><strong>Input Validation and Sanitization:</strong> Preventing attacks by validating and sanitizing user inputs.</li>
+                <li><strong>Security Testing and Auditing:</strong> Regular testing to identify and rectify security weaknesses.</li>
+            </ul>
+        </div>
+
+        <div id="quiz" class="section">
+            <div class="container">
+                <h1>Self-Assessment Quiz</h1>
+                <form id="quizForm">
+                    <div class="question" id="question1">
+                        <p>1. What is the capital of France?</p>
+                        <label><input type="radio" name="q1" value="Paris"> Paris</label>
+                        <label><input type="radio" name="q1" value="London"> London</label>
+                        <label><input type="radio" name="q1" value="Rome"> Rome</label>
+                        <button type="button" onclick="nextQuestion(1)">Next</button>
+                    </div>
+
+                    <div class="question" id="question2" style="display: none;">
+                        <p>2. Fill in the blank: The square root of 64 is __.</p>
+                        <input type="text" name="q2" placeholder="Enter your answer here">
+                        <button type="button" onclick="nextQuestion(2)">Next</button>
+                    </div>
+
+                    <!-- Add additional questions here using similar structure -->
+
+                    <div id="results" class="result"></div>
+                    <button class="reset-btn" onclick="restartQuiz()">Restart Quiz</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="resources" class="section">
+            <h2>Resources</h2>
+            <p>Explore these resources to learn more about web security:</p>
+            <ul>
+                <li><a href="https://owasp.org/" target="_blank">OWASP</a> - Web security resources.</li>
+                <li><a href="https://www.cisa.gov/" target="_blank">CISA</a> - Cybersecurity best practices.</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Web Security Project</p>
+    </footer>
+
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+        }
+
+        // Initialize the page by showing the home section
+        showSection('home');
+
+        // Quiz logic
+        let currentQuestion = 1;
+
+        function nextQuestion(questionNumber) {
+            document.getElementById('question' + questionNumber).style.display = 'none';
+            if (questionNumber < 2) { // Update this with the total number of questions
+                document.getElementById('question' + (questionNumber + 1)).style.display = 'block';
+            } else {
+                submitQuiz();
+            }
+        }
+
+        function submitQuiz() {
+            var score = 0;
+            var totalQuestions = 2; // Update this with the total number of questions
+            var answerDetails = "";
+
+            // Question 1: Multiple Choice (correct answer: Paris)
+            var q1Answer = document.querySelector('input[name="q1"]:checked');
+            if (q1Answer && q1Answer.value === "Paris") {
+                score++;
+                answerDetails += `<p>Q1: Correct - Paris</p>`;
+            } else {
+                answerDetails += `<p>Q1: Incorrect. Correct answer: Paris</p>`;
+            }
+
+            // Question 2: Fill-in-the-blank (correct answer: 8)
+            var q2Answer = document.querySelector('input[name="q2"]').value.trim();
+            if (q2Answer === "8") {
+                score++;
+                answerDetails += `<p>Q2: Correct - 8</p>`;
+            } else {
+                answerDetails += `<p>Q2: Incorrect. Correct answer: 8</p>`;
+            }
+
+            var passFail = (score / totalQuestions) >= 0.8 ? "Pass" : "Fail";
+            var resultText = `Your score is ${score} out of ${totalQuestions}. You ${passFail}.`;
+
+            document.getElementById("results").innerHTML = resultText + answerDetails;
+        }
+
+        function restartQuiz() {
+            document.getElementById("quizForm").reset();
+            document.getElementById("results").innerHTML = "";
+            document.getElementById('question1').style.display = 'block';
+            document.getElementById('question2').style.display = 'none';
+            // Reset the display for other questions as needed
+        }
+    </script>
+</body>
+</html>
